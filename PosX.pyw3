@@ -1,0 +1,140 @@
+#!/usr/bin/python3
+
+#Endversion B.Wille 7.1.17
+#needs xclip with Linux and installation of  Python package 
+#pyperclip
+
+from requests import  *
+from tkinter import  *
+import pyperclip
+import sys
+import time
+from tkinter import messagebox
+
+class App:
+       
+        
+    def __init__(self, master):
+        
+        self.title="Gshogi-Position from ASCII"
+        self.button = Button(master, text="Position for GShogi in clipboard",command=self.translate)
+        self.button.grid(column=4,  row=4,  padx=5,  pady = 5)
+                 #Menu       
+        self.menubar = Menu(root)
+        self.helpmenu = Menu(self.menubar,  tearoff=1)
+        self.helpmenu.add_command(labe='Info',  command=self.box)
+        self.filemenu = Menu(self.menubar, tearoff=0)
+        self.filemenu.add_command(label="Quit!", command=root.quit)
+        self.menubar.add_cascade(label="File", menu=self.filemenu)
+        self.menubar.add_cascade(label="Help", menu=self.helpmenu)
+        root.config(menu=self.menubar)        
+        
+    def box(self):
+                messagebox.showwarning("PosX", "ASCII-Representation of\
+                                       board to position-string for Gshogi bw 2017", icon='info')
+                
+   
+    def translate(self):
+                liste = []
+                clip = pyperclip.paste()
+                J = 0
+                blacklist = ""
+                whitelist = ""
+                liste = clip.split("\n") 
+                
+                while True:
+                        if len(liste[J]) < 1 :
+                                J = J+1 
+                                continue
+                        m = liste[J].find(":")
+                        if m != -1:
+                                whitelist = liste[J][m+1:]
+                                whitelist = whitelist.strip()
+                        if (liste[J][0] != "+")  and (liste[J][1] != "+"):   
+                                J = J +1
+                        else:
+                                break
+                #print ("wh",whitelist )
+                output = ""
+                z = 0
+                for i  in range(J+1,  len(liste)):
+                        #at = liste[i]
+                        #print(at)
+                        if len(liste[i]) < 1 :
+                                continue
+                        if  (liste[i][1]=="+") or (liste[i][0]=="+"): 
+                                break
+                        m = liste[i].find(":")
+                        if m != -1:
+                                m = m - 14  #steht noch in der falschen Schleife: nur einmal pro Zeile
+                                #print (liste[i][m+1:])
+                                if  liste[i].startswith("Black", m+1):
+                                        blacklist = liste[i][m+15:]
+                                        blacklist = blacklist.strip()
+                                else:
+                                        if  liste[i].startswith("White", m+1):
+                                                whitelist = liste[i][m+15:]
+                                                whitelist = whitelist.strip()
+                               
+                        for k in range(len(liste[i])):
+                                                        
+                                if (liste[i][k] == "|") and (k >1):
+                                        if z != 0:
+                                                output = output + str(z)
+                                                z = 0
+                                        break
+                                if (liste[i][k] == "*"):
+                                        z = z + 1
+                                if (liste[i][k]== " "):
+                                        continue
+                                if (liste[i][k]=="w"): 
+                                        if (z != 0):
+                                                output = output + str(z)
+                                                z = 0 
+                                        g = liste[i][k+1].lower()
+                                        output = output + g
+                                if (liste[i][k]=="b"):
+                                        if z != 0:
+                                                output = output + str(z)
+                                                z = 0 
+                                      
+                                        g = liste[i][k+1]
+                                        output = output + g
+                               
+                        output = output+"/"
+                        
+                output = output[0:-1]
+                #print (output)
+                if blacklist == "nothing" and whitelist=="nothing":
+                        whitelist = "-"
+                if  blacklist == "nothing":
+                        blacklist = ""
+                if whitelist == "nothing":
+                        whitelist = ""
+                #print ("w ",  whitelist)
+                #print ("b ",  blacklist)
+                blacklist = blacklist.strip()
+                whitelist = whitelist.strip()
+                blacklist = blacklist.replace(" ","")
+                blacklist = blacklist.replace("s","")
+                blacklist = blacklist.replace(",","")
+                whitelist = whitelist.replace(" ","")
+                whitelist = whitelist.replace("s","")
+                whitelist = whitelist.replace(",","")
+                whitelist = whitelist.lower()
+                #print ("w ",  whitelist)
+                #print ("b ",  blacklist)
+                output = output + " " + "b" + " "
+                output = output + whitelist +  blacklist.upper() + " 1"
+                pyperclip.copy(output)
+                print (output)
+
+if __name__ == '__main__':
+    root = Tk()
+    root.wm_title("Position for GShogi")
+    app = App(root)
+    root.mainloop()
+
+
+
+
