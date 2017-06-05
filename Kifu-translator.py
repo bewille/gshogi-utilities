@@ -11,7 +11,7 @@ import array
 
 import sys
 import time
-
+# 4.6.17: 王 added as Kanji for King
 class App:
 
 
@@ -22,7 +22,7 @@ class App:
         self.G ={1:'a',2:'b',3:'c',4:'d',5:'e',6:'f',7:'g',8:'h',9:'i'}
         #Kanji are unique!!
         #Pieces  
-        self.P = {  '歩':'P', '香':'L', '桂': 'N', '銀':'S', '金':'G', '飛':'R', '角':'B', '玉':'K', '龍':'+R', '竜':'+R', '馬':'+B', '全':'+S',\
+        self.P = {  '歩':'P', '香':'L', '桂': 'N', '銀':'S', '金':'G', '飛':'R', '角':'B', '玉':'K', '王':'K','龍':'+R', '竜':'+R', '馬':'+B', '全':'+S',\
                     '圭':'+N', '杏':'+L', 'と':'+P'}
         #Terms
         self.T = {'打': 'Drop', '上':'Forward',"行":'Forward','引':'Backward','寄':'Sideward','左':'Left','右':'Right','成':'Promotion','直':'Upright','不成':'Without Promotion',\
