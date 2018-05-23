@@ -35,6 +35,7 @@ USL-translator will translate files e.g. from the Shogi-Maze website http://shog
 
 Kifu-translator will translate games in kif-format. Handy to pick recent games from japanese websites.
 The new version will also translate a number of formats created by 81shogi.com.
+
 ShogiQuest translates the file exported by ShogiQest.com
 
 have fun!
