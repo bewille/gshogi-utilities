@@ -34,7 +34,8 @@ under Edit-> paste position you can now paste the posititon to gshogi
 USL-translator will translate files e.g. from the Shogi-Maze website http://shogimaze.free.fr - actually from BCM-Games USL-format. If you are running Linux there is no way to run BCM-games under wine to my knowledge so this may be useful.
 
 Kifu-translator will translate games in kif-format. Handy to pick recent games from japanese websites.
-The new version will also translate a number of formats created by 81shogi.com.
+The new version will also translate a number of formats created by 81shogi.com. Files with multiple variants are translated.
+Old shogi notation with kanji for forward sidewards etc is not yet handled. I haven't found time to test the routines and I have not found sufficients kifu files in this format to test.
 
 ShogiQuest translates the file exported by ShogiQest.com
 
