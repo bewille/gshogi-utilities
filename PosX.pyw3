@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-#Endversion B.Wille 7.1.17
+#Endversion B.Wille 1.10.18
 #needs xclip with Linux and installation of  Python package 
 #pyperclip
 
@@ -15,10 +15,16 @@ class App:
        
         
     def __init__(self, master):
-        
+        root.minsize(300,250)
+        self.meldung = StringVar()
         self.title="Gshogi-Position from ASCII"
         self.button = Button(master, text="Position for GShogi in clipboard",command=self.translate)
-        self.button.grid(column=4,  row=4,  padx=5,  pady = 5)
+        self.buttontrans = Button(master, text="Moves in Anono-Coding in clipboard",command=self.read)
+        self.buttontrans.grid(column=4, row = 5, sticky=W, pady = 5)
+        self.button.grid(column=4,  row=4, sticky=W,  padx=5,  pady = 5)
+        self.messageMeldung = Message(master, relief=SUNKEN, textvariable=self.meldung, text="                 ",
+                                      fg="red", width=250)
+        self.messageMeldung.grid(column=4, row=6, sticky=W, padx=5)
                  #Menu       
         self.menubar = Menu(root)
         self.helpmenu = Menu(self.menubar,  tearoff=1)
@@ -27,12 +33,85 @@ class App:
         self.filemenu.add_command(label="Quit!", command=root.quit)
         self.menubar.add_cascade(label="File", menu=self.filemenu)
         self.menubar.add_cascade(label="Help", menu=self.helpmenu)
-        root.config(menu=self.menubar)        
+        root.config(menu=self.menubar)
+
+        self.All= {'一': 'a', '二': 'b', '三': 'c', '四': 'd', '五': 'e', '六': 'f', '七': 'g', '八': 'h', '九': '', \
+                   #'1': 'a', '2': 'b', '3': 'c', '4': 'd', '5': 'e', '6': 'f', '7': 'g', '8': 'h', '9': 'i', \
+                   '歩': 'P', '香': 'L', '桂': 'N', '銀': 'S', '金': 'G', '飛': 'R', '角': 'B', '玉': 'K', '王': 'K', '龍': '+R',
+                   '竜': '+R', '馬': '+B', '全': '+S', \
+                   '圭': '+N', '杏': '+L', 'と': '+P' ,\
+                    '打': '*', '上': ' Forward', "行": ' Forward', '引': ' Backward', '寄': ' Sideward', '左': ' Left',\
+                    '右': ' Right', '成': '+', '直': ' Upright', '不成': ' ', \
+                    '同': 'Same', '投': ' Resign', '了': ' Resign', "千": ' Repetition', "待": ' Draw', '中': ' Interrupted'}
+        self.P =['▲','Sente', '△', 'Gote']
+        self.prom = {'龍': '+R',
+                   '竜': '+R', '馬': '+B', '全': '+S', \
+                   '圭': '+N', '杏': '+L', 'と': '+P' }
+
         
     def box(self):
                 messagebox.showwarning("PosX", "ASCII-Representation of\
-                                       board to position-string for Gshogi bw 2017", icon='info')
-                
+                                       board to position-string for Gshogi\
+                                        Translation of Moves in old Kifu\
+                                        coding. \
+                                        bw 2018", icon='info')
+
+    def read(self):
+        clip = pyperclip.paste()
+        #clip = "▲７三銀打 △９二玉 ▲７二竜 △同金 ▲８一銀直 △同玉 ▲７二と △９二玉 ▲８二と"
+        outp = ""
+        last = ""
+        first = 0
+        lastn = 0
+        lasto = 1
+        prom = 0
+        self.meldung.set("Translate")
+        for i in range(0,len(clip)):
+           if clip[i] in self.P:
+              if  first == 0:
+                 first = i
+           else:
+              lastn = i
+              if lastn -first > 6:
+                 first = lastn
+              else:
+                 break
+
+        #Reading - frame
+        frame = lastn - first
+
+        for i in range(0,len(clip)):
+            try:
+                outp  = outp + self.All.get(clip[i])
+            except:
+                outp = outp + clip[i]
+                pass
+            if clip[i] in self.prom:
+                prom = 1
+            if (clip[i] in self.P) | (i == len(clip)-1):
+                if len(outp) > 5:
+                    cat = len(outp)
+                    #if (outp[cat-9:cat].find("Same") != -1) & (last != ""):
+                    if (outp[lasto:cat].find("Same") != -1) & (last != ""):
+                        ##outp = outp[0:cat-9] + " " + last + " " + clip[i]
+                        if prom == 1:
+                            outp = outp[0:lasto] + outp[lasto + 4: lasto + 6] + last + outp[lasto + 7:cat]
+                        else:
+                            outp = outp[0:lasto] + outp[lasto + 4] + last + outp[lasto + 5:cat]
+                    else:
+                        last = outp[lasto :lasto + 2]
+                        if prom == 1:
+                            outp = outp[0:lasto] + outp[lasto + 2:lasto + 4] + last + outp[lasto + 5:cat]
+                        else:
+                            outp = outp[0:lasto] + outp[lasto + 2] + last  + outp[lasto +3:cat]
+                    lasto = len(outp)
+                    lastc = i
+                    prom = 0
+
+        self.meldung.set(clip + "\n Transl: \n" + outp)
+
+
+
    
     def translate(self):
                 liste = []
@@ -127,6 +206,7 @@ class App:
                 output = output + " " + "b" + " "
                 output = output + whitelist +  blacklist.upper() + " 1"
                 pyperclip.copy(output)
+                self.meldung.set(" translated Gshogi position in clipboard")
                 print (output)
 
 if __name__ == '__main__':
