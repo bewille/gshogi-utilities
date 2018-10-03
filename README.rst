@@ -30,6 +30,7 @@ Copy the ASCII-Representation of a shogi-position and press the button of the pr
 under Edit-> paste position you can now paste the posititon to gshogi
 - comes in handy sometimes when replaying positions from publications
 - doesn't work in all cases since there are a bunch of ways to represent shogi-boards this way. Works e.g. for "Quest of the lost systems" http://www.shogi.net/quest/
+A second part translates Mr. Anono's kifu notation in the translation of his endgame-book on the website of the german shogi society and translates it into an alphanumeric psn-notation.
 
 USL-translator will translate files e.g. from the Shogi-Maze website http://shogimaze.free.fr - actually from BCM-Games USL-format. If you are running Linux there is no way to run BCM-games under wine to my knowledge so this may be useful.
 
