@@ -42,4 +42,4 @@ ShogiQuest translates the file exported by ShogiQest.com
 
 have fun!
 
-Bernd Wille, May 2017
+Bernd Wille, August 18
